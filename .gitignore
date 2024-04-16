@@ -1,0 +1,21 @@
+# Python
+*.pyc
+__pycache__/
+venv/
+
+# Flask
+instance/
+.webassets-cache/
+
+# Docker
+.docker/
+
+# IDE/Editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+logs/
