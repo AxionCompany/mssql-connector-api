@@ -2,8 +2,13 @@ import pymssql
 import json
 from flask import Flask, request, jsonify
 import pandas as pd
+import os
 
 app = Flask(__name__)
+# create a health check route
+@app.route('/', methods=['GET'])
+def health():
+    return jsonify({'status': 'ok'})
 
 @app.route('/teste', methods=['POST'])
 def teste():
@@ -57,4 +62,4 @@ def teste():
             conn.close()
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=9000)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 9000)))
