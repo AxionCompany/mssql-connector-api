@@ -5,10 +5,10 @@ FROM python:3.8-slim
 WORKDIR /usr/src/app
 
 # # Install FreeTDS and other dependencies you might need
-# RUN apt-get update && apt-get install -y \
-#     freetds-dev \
-#     freetds-bin \
-#     && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+    freetds-dev \
+    freetds-bin \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy the current directory contents into the container at /usr/src/app
 COPY . .
