@@ -17,6 +17,9 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Define environment variable
+ENV PORT 9000
+
+EXPOSE $PORT
 
 # run the command to start ugunicorn server, on host 0.0.0.0:9000, 
 CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app
