@@ -3,11 +3,14 @@ import json
 from flask import Flask, request, jsonify
 import pandas as pd
 import os
-import threading
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
 app = Flask(__name__)
 
-def execute_code_and_return_response(name, params, __filterTable__, server, user, password, database, port):
+executor = ThreadPoolExecutor(max_workers=5)
+
+async def execute_code_and_return_response(name, params, __filterTable__, server, user, password, database, port):
     with app.app_context():  # Push application context manually
         conn = None  # Initialize conn before the try block
         try:
@@ -67,9 +70,10 @@ def teste():
         return jsonify({'status': 'error', 'message': 'Missing Parameters. Make sure you\'ve set `name` parameter'}), 400
 
     if wait:
-        return execute_code_and_return_response(name, params, __filterTable__, server, user, password, database, port)
+        return asyncio.run(execute_code_and_return_response(name, params, __filterTable__, server, user, password, database, port))
     else:
-        threading.Thread(target=execute_code_and_return_response, args=(name, params, __filterTable__, server, user, password, database, port)).start()
+        loop = asyncio.get_event_loop()
+        loop.run_in_executor(executor, execute_code_and_return_response, name, params, __filterTable__, server, user, password, database, port)
         return jsonify({'status': 'ok', 'message': 'Procedure started ' + name +' successfly'})
 
 if __name__ == '__main__':
